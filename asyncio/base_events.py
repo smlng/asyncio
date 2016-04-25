@@ -577,12 +577,7 @@ class BaseEventLoop(events.AbstractEventLoop):
 
     def getaddrinfo(self, host, port, *,
                     family=0, type=0, proto=0, flags=0):
-        info = _ipaddr_info(host, port, family, type, proto)
-        if info is not None:
-            fut = futures.Future(loop=self)
-            fut.set_result([info])
-            return fut
-        elif self._debug:
+        if self._debug:
             return self.run_in_executor(None, self._getaddrinfo_debug,
                                         host, port, family, type, proto, flags)
         else:
